@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Highbrow Scribes Publications - Author Guide</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0b1a30;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+    .story-container {
+      width: 100%;
+      max-width: 420px;
+      height: 90vh;
+      max-height: 750px;
+      background-color: #0f2442;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+    }
+    .progress-bar-container {
+      display: flex;
+      gap: 4px;
+      padding: 12px 15px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+    }
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      flex: 1;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #00875a;
+      transition: width 0.3s ease;
+    }
+    .slide-content {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .slide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .touch-area {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      z-index: 5;
+    }
+    .touch-left { left: 0; }
+    .touch-right { right: 0; }
+
+    .bottom-cta {
+      position: absolute;
+      bottom: 25px;
+      left: 20px;
+      right: 20px;
+      z-index: 10;
+      text-align: center;
+    }
+    .cta-btn {
+      background: #25D366;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 15px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 30px;
+      display: block;
+      box-shadow: 0 4px 15px rgba(37,211,102,0.4);
+      transition: transform 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .cta-btn:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body>
+
+<div class="story-container">
+  <div class="progress-bar-container" id="progress-bars"></div>
+
+  <div class="touch-area touch-left" onclick="prevSlide()"></div>
+  <div class="touch-area touch-right" onclick="nextSlide()"></div>
+
+  <div class="slide-content">
+    <img id="current-image" class="slide-img" src="" alt="Author Guide Slide">
+  </div>
+
+  <div class="bottom-cta" id="cta-container" style="display: none;">
+    <a href="https://wa.me/919315426795?text=Hi!%20I%20reviewed%20your%20interactive%20author%20guide%20and%20want%20to%20publish%20my%20book%20with%20Highbrow%20Scribes%20Publications." class="cta-btn" target="_blank">
+      💬 Partner With Us on WhatsApp
+    </a>
+  </div>
+</div>
+
+<script>
+  const slides = [
+    'https://i.ibb.co/p6Ks8PRT/1-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/F4nFwsDc/2-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/CCdNG5w/3-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/SX4v6p31/4-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/vCPgkByv/5-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/VWZQ6R90/6-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/dwt2WNCs/7-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/FbbJ9tCP/8-Highbrow-Scribes-Publications.webp',
+    'https://i.ibb.co/8g1dnvPD/9-Highbrow-Scribes-Publications.webp'
+  ];
+
+  let currentIndex = 0;
+
+  function preloadImages() {
+    slides.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }
+
+  function init() {
+    preloadImages();
+    const barsContainer = document.getElementById('progress-bars');
+    barsContainer.innerHTML = '';
+    slides.forEach((_, index) => {
+      const bar = document.createElement('div');
+      bar.className = 'progress-bar';
+      bar.innerHTML = `<div class="progress-fill" id="fill-${index}"></div>`;
+      barsContainer.appendChild(bar);
+    });
+    updateSlide();
+  }
+
+  function updateSlide() {
+    document.getElementById('current-image').src = slides[currentIndex];
+    
+    slides.forEach((_, index) => {
+      const fill = document.getElementById(`fill-${index}`);
+      if (index <= currentIndex) {
+        fill.style.width = '100%';
+      } else {
+        fill.style.width = '0%';
+      }
+    });
+
+    const cta = document.getElementById('cta-container');
+    if (currentIndex === slides.length - 1) {
+      cta.style.display = 'block';
+    } else {
+      cta.style.display = 'none';
+    }
+  }
+
+  function nextSlide() {
+    if (currentIndex < slides.length - 1) {
+      currentIndex++;
+      updateSlide();
+    }
+  }
+
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlide();
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>
